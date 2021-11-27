@@ -1,3 +1,4 @@
+import { strictEqual } from 'assert';
 import db from '../src/db';
 import User from '../src/models/user.model';
 
@@ -30,6 +31,43 @@ class UserRepository{
         const { rows } = await db.query<User>(query, values);
         const [ user ] = rows;
         return user;
+    }
+    async create(user: User): Promise<string>{
+        const script = `
+        INSERT INTO application_user{
+            username,
+            password
+        }
+        VALUES ($1, crypt($2, 'banana'))
+        RETURNING uuid
+        `;
+
+        /**lembrando que banana é a senha, então precisa-se transforma, no caso $3, em uma variável de ambiente ou algo mais seguro */
+        const values = [user.username, user.password];
+        const { rows} = await db.query<{uuid: string}>(script, values);
+        const [newUser] = rows;
+        return newUser.uuid;
+    }
+    async update(user: User): Promise<void>{
+        const script = `
+        UPDATE application_user
+        SET 
+            username = $1
+            password = crypt($2, 'banana')
+        WHERE uuid = $3    `;
+        const values = [user.username, user.password, user.uuid];
+        await db.query(script, values);
+        
+
+    }
+    async remove(uuid: string): Promise<void>{
+        const cript = `
+        DELETE
+        FROM appllication_user
+        WHERE uuid = $1
+        `;
+        const values = [uuid];
+        await db.query(cript, values);
     }
 };
 export default new UserRepository;
