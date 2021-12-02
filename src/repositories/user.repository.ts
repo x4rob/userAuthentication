@@ -1,7 +1,7 @@
 import { strictEqual } from 'assert';
-import  DatabaseError  from '../src/models/errors/database.errors.model';
-import db from '../src/db';
-import User from '../src/models/user.model';
+import  DatabaseError  from '../models/errors/database.errors.model';
+import db from '../db';
+import User from '../models/user.model';
 
 
 

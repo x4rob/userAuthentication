@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import StatusCode, { StatusCodes } from 'http-status-codes';
-import userRepository from '../../repositories/user.repository';
+import userRepository from '../repositories/user.repository';
 import DatabaseError from '../models/errors/database.errors.model';
 
 const usersRoute = Router();/* uma forma de configurar rotas*/
