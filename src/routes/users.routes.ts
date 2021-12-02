@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import StatusCode from 'http-status-codes';
+import StatusCode, { StatusCodes } from 'http-status-codes';
 import userRepository from '../../repositories/user.repository';
+import DatabaseError from '../models/errors/database.errors.model';
 
 const usersRoute = Router();/* uma forma de configurar rotas*/
 
@@ -16,7 +17,7 @@ usersRoute.get('/users/:uuid', async (req: Request<{uuid: string}>, res: Respons
         res.status(StatusCode.OK).send(user);
 
     }catch(error){
-        
+      next(error);
     }
 });
 usersRoute.post('/users', async (req: Request, res: Response, next: NextFunction) =>{
